@@ -24,8 +24,6 @@
 @(VECTOR_OPS vec4f, x, y, z, w)
 @(VECTOR_OPS vec4d, x, y, z, w)
 
-@(LEXISTS ,,,,3)
-
 int main() {
     return 0;
 }
