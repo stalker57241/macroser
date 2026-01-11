@@ -2,20 +2,34 @@
 
 Program to unwrap special macros
 
+# Build
+
+Install `build`:
+```sh
+$ python -m pip install --upgrade build
+```
+Build it
+```sh
+# To build:
+$ python -m build .
+# To install:
+$ python -m pip install .
+```
+
 # How to run
 
 ```sh
 $ python -m macroser -Imacros -M@ file.in
 ```
-## -I<folderpath>
+## -I\<folderpath\>
 
 To include folder
 
-## -o<filename>
+## -o\<filename\>
 
 To specify filename
 
-## -M<prefix>
+## -M\<prefix\>
 
 To specify used prefix.
 It can be a string (Like "@@", or "_@"). Maybe you can refactor code using it (Not tested, but sounds interesting... `python -m macroser -Mvec2i_ file.in`)
@@ -63,15 +77,16 @@ int main() {
     .z = 0
   };
   vec3i c = vec3i_add(a, b);
-  printf(" A+B=C);
+  printf(" A+B=C");
   printf("x%d %d %d", a.x, b.x, c.x);
   printf("y%d %d %d", a.y, b.y, c.y);
   printf("z%d %d %d", a.z, b.z, c.z);
   return 0;
 }
 ```
+Built with `python -m macroser -Imacros main.c.in`:
 ```C
-// main.c (Result of python -m macroser -Imacros main.c.in )
+// main.c
 
 #include <stdio.h>
 // Macroser understands when include is absolute.
