@@ -1,4 +1,5 @@
 # Macroser
+[![Upload Python Package](https://github.com/stalker57241/macroser/actions/workflows/python-publish-testpypi.yml/badge.svg?branch=general&event=milestone)](https://github.com/stalker57241/macroser/actions/workflows/python-publish-testpypi.yml)
 
 Program to unwrap special macros
 
