@@ -1,11 +1,15 @@
-define VECTOR(name, type, params...)
-    typedef struct { @type @params; } @name;
+define VECTOR(name, type, fields...)
+  typedef struct { @type @fields; } @name;
 enddefine
-define VECTOR_AXIS_OP(field, OP)
-    .@field = a.@field @OP b.@field
+define VECTOR_ADD_FIELD(field)
+  .@field = a.@field + b.@field
 enddefine
-define VECTOR_AXIS_ADD(field)
-    @(VECTOR_AXIS_OP @field, +)
+define VECTOR_ADD(name, field...)
+  @name @name_add(@name a, @name b) {
+    return (@name) {
+      @(foreach VECTOR_ADD_FIELD, @field)
+    };
+  }
 enddefine
 
 define VECTOR_AXIS_SUB(field)
