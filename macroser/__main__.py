@@ -1,8 +1,8 @@
 import sys
-from macroser_stalker320.marker import *
-from macroser_stalker320.parse import *
-from macroser_stalker320.macrodata import *
-from macroser_stalker320.include import *
+from macroser.marker import *
+from macroser.parse import *
+from macroser.macrodata import *
+from macroser.include import *
 
 output_file: str | None = None
 

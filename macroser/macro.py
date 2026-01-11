@@ -1,4 +1,4 @@
-from macroser_stalker320.macrodata import MacroData
+from macroser.macrodata import MacroData
 __macros: list[MacroData] = []
 
 def push_macro(macro: MacroData):

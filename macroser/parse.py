@@ -1,7 +1,7 @@
-from macroser_stalker320.macrodata import *
-from macroser_stalker320.marker import *
-from macroser_stalker320.macro import *
-from macroser_stalker320.include import find_file
+from macroser.macrodata import *
+from macroser.marker import *
+from macroser.macro import *
+from macroser.include import find_file
 
 class Parse:
     text: str = ""
