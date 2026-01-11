@@ -1,0 +1,13 @@
+LICENCE.md
+pyproject.toml
+macroser_stalker320/__init__.py
+macroser_stalker320/__main__.py
+macroser_stalker320/include.py
+macroser_stalker320/macro.py
+macroser_stalker320/macrodata.py
+macroser_stalker320/marker.py
+macroser_stalker320/parse.py
+macroser_stalker320.egg-info/PKG-INFO
+macroser_stalker320.egg-info/SOURCES.txt
+macroser_stalker320.egg-info/dependency_links.txt
+macroser_stalker320.egg-info/top_level.txt

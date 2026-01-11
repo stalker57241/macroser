@@ -1,0 +1,5 @@
+setup.py
+program/macroser.egg-info/PKG-INFO
+program/macroser.egg-info/SOURCES.txt
+program/macroser.egg-info/dependency_links.txt
+program/macroser.egg-info/top_level.txt

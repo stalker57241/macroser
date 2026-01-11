@@ -1,0 +1,31 @@
+@(include rules.macro)
+
+@(VECTOR vec2i, int,    x, y)
+@(VECTOR vec2f, float,  x, y)
+@(VECTOR vec2d, double, x, y)
+
+@(VECTOR vec3i, int,    x, y, z)
+@(VECTOR vec3f, float,  x, y, z)
+@(VECTOR vec3d, double, x, y, z)
+
+@(VECTOR vec4i, int,    x, y, z, w)
+@(VECTOR vec4f, float,  x, y, z, w)
+@(VECTOR vec4d, double, x, y, z, w)
+
+@(VECTOR_OPS vec2i, x, y)
+@(VECTOR_OPS vec2f, x, y)
+@(VECTOR_OPS vec2d, x, y)
+
+@(VECTOR_OPS vec3i, x, y, z)
+@(VECTOR_OPS vec3f, x, y, z)
+@(VECTOR_OPS vec3d, x, y, z)
+
+@(VECTOR_OPS vec4i, x, y, z, w)
+@(VECTOR_OPS vec4f, x, y, z, w)
+@(VECTOR_OPS vec4d, x, y, z, w)
+
+@(LEXISTS ,,,,3)
+
+int main() {
+    return 0;
+}

@@ -1,0 +1,36 @@
+define VECTOR(name, type, params...)
+    typedef struct { @type @params; } @name;
+enddefine
+define VECTOR_AXIS_OP(field, OP)
+    .@field = a.@field @OP b.@field
+enddefine
+define VECTOR_AXIS_ADD(field)
+    @(VECTOR_AXIS_OP @field, +)
+enddefine
+
+define VECTOR_AXIS_SUB(field)
+    @(VECTOR_AXIS_OP @field, -)
+enddefine
+
+define VECTOR_ADD(name, params...)
+    @name @name_add(@name a, @name b) {
+        return (@name) {
+            @(foreach VECTOR_AXIS_ADD, @params)
+        };
+    }
+enddefine
+define VECTOR_SUB(name, params...)
+    @name @name_sub(@name a, @name b) {
+        return (@name) {
+            @(foreach VECTOR_AXIS_SUB, @params)
+        };
+    }
+enddefine
+define VECTOR_OPS(name, params...)
+    @(VECTOR_ADD @name, @params)
+    @(VECTOR_SUB @name, @params)
+enddefine
+
+define LEXISTS(args...)
+    @(optional @args)
+enddefine
