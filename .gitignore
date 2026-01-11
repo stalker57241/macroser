@@ -1,5 +1,5 @@
 .vscode/
 .vs/
-*/__pycache__/
+**/__pycache__/
 dist/
-*/*.egg-info/
+**/*.egg-info/
