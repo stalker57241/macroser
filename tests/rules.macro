@@ -11,6 +11,30 @@ define VECTOR_ADD(name, field...)
     };
   }
 enddefine
-define FIRST_EXISTS(a, b)
-  @(optional a,b)
+
+define VECTOR_AXIS_SUB(field)
+    @(VECTOR_AXIS_OP @field, -)
+enddefine
+
+define VECTOR_ADD(name, params...)
+    @name @name_add(@name a, @name b) {
+        \treturn (@name) {
+            \t\t@(foreach [,\n\t\t] VECTOR_AXIS_ADD, @params)
+        \t};
+    }
+enddefine
+define VECTOR_SUB(name, params...)
+    @name @name_sub(@name a, @name b) {
+        \treturn (@name) {
+            \t\t@(foreach [,\n\t\t] VECTOR_AXIS_SUB, @params)
+        \t};
+    }
+enddefine
+define VECTOR_OPS(name, params...)
+    @(VECTOR_ADD @name, @params)
+    @(VECTOR_SUB @name, @params)
+enddefine
+
+define LEXISTS(args...)
+    @(first @args)
 enddefine

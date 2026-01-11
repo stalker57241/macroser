@@ -1,7 +1,75 @@
+from typing import Callable
 from macroser.macrodata import *
 from macroser.marker import *
 from macroser.macro import *
 from macroser.include import find_file
+
+
+
+parsers: dict[str, Callable[[str], str]] = {}
+last_keyword: str = ""
+
+def register_parser(keyword: str = "") -> Callable[[Callable[[str], str]], Callable[[str], str]]:
+    def decorator(fn: Callable[[str], str]) -> Callable[[str], str]:
+        parsers[keyword] = fn
+        return fn
+    return decorator
+
+@register_parser()
+def parse_any(args: str) -> str:
+    arglist: list[str] = list(map(lambda x: x.strip(), args.split(",")))
+    macro: MacroData | None = get_macro(last_keyword.lower())
+    if macro is None:
+        raise ValueError("Macro not found")
+    value: str = apply_indents(macro.apply(*arglist))
+    print(f"processed: {value}")
+    return value
+
+@register_parser("include")
+def parse_include(args: str) -> str:
+    print("[include] args: ", args)
+    macros: list[str] = []
+    match args.strip().split():
+        case ["/", *arg]:
+            macros = includefile("".join(arg))
+        case arg:
+            macros = includefile(find_file("".join(arg)))
+    for macro_str in macros:
+        macro = parse_macro(macro_str.splitlines())
+        if macro is not None:
+            push_macro(macro)
+    return ""
+
+@register_parser("foreach")
+def parse_foreach(args: str) -> str:
+    print("[foreach] args: ", args)
+    separator, args = args.split(" ", 1)
+    _is_separator_specified = separator.find("[") >= 0
+    _is_separator_closed = separator.find("]") >= 0
+    separator_chars: str = ""
+    if _is_separator_specified:
+        if _is_separator_closed:
+            separator_chars = apply_indents(separator[
+                separator.find("[") + 1:
+                separator.find("]")])
+            print("sep_chars: ", separator_chars)
+        else:
+            raise ValueError("Bracket not closed")
+    query_name, args = args.split(",", 1)
+    macro: MacroData | None = get_macro(query_name.lower())
+    if macro is None:
+        raise ValueError("Macro not found")
+    result: list[str] = []
+    for arg in args.strip().split(","):
+        value = apply_indents(macro.apply(arg.strip()))
+        result.append(value)
+    return separator_chars.join(result)
+
+@register_parser("first")
+def parse_first(args: str) -> str:
+    print("[first] args: ", args)
+    _args = list(filter(lambda x: x != "", map(lambda x: x.strip(), args.split(","))))
+    return _args[0]
 
 class Parse:
     text: str = ""
@@ -23,49 +91,11 @@ class Parse:
     def process_expr(expr: str) -> str:
         query_name, args = expr.split(" ", 1)
         print(f"expr: {expr}")
-        arglist: list[str] = list(map(lambda x: x.strip(), args.split(",")))
-        match query_name:
-            case "include":
-                print("[include] args: ", args)
-                macros: list[str] = []
-                match args.strip().split():
-                    case ["/", *arg]:
-                        macros = includefile("".join(arg))
-                    case arg:
-                        macros = includefile(find_file("".join(arg)))
-                for macro_str in macros:
-                    macro = parse_macro(macro_str.splitlines())
-                    if macro is not None:
-                        push_macro(macro)
-                # for macro in macros:
-                #     if not isinstance(macro, str): continue
-                #     macro = parse_macro(macro)
-                #     if macro is not None:
-                #         push_macro(macro)
-                return ""
-            case "foreach":
-                print("[foreach] args: ", args)
-                query_name, args = args.split(",", 1)
-                macro: MacroData | None = get_macro(query_name.lower())
-                if macro is None:
-                    raise ValueError("Macro not found")
-                result: list[str] = []
-                for arg in args.strip().split(","):
-                    value = macro.apply(arg.strip())
-                    result.append(value)
-                return ",\n".join(result)
-            case "optional":
-                print("[optional] args: ", args)
-                args = list(filter(lambda x: x != "", map(lambda x: x.strip(), args.split(","))))
-                return args[0]
-            case query_name:
-                macro: MacroData | None = get_macro(query_name.lower())
-                if macro is None:
-                    raise ValueError("Macro not found")
-                value = macro.apply(*arglist)
-                print(f"processed: {value}")
-                return value
-
+        if query_name in parsers.keys():
+            return parsers[query_name](args)
+        global last_keyword
+        last_keyword = query_name
+        return parsers[""](args)
     def process(self) -> str:
         code = self.text
         macro_idx: int = code.find(get_marker())

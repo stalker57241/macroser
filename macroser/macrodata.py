@@ -3,6 +3,10 @@ from pathlib import Path
 from typing import Literal
 from enum import Enum, auto
 
+def apply_indents(code: str) -> str:
+    """ DEPRECATED: Need better insertion... at parse level """
+    return code.replace("\\n", "\n").replace("\\t", "\t")
+
 class MacroData:
     name: str
 
@@ -56,7 +60,7 @@ class MacroDataExpr(MacroData):
         if len(_args) == 0:
             raise ValueError("Empty arguments")
         self.args = self.parse(_args)
-        self.lines = _lines
+        self.lines = list(map(apply_indents, _lines))
     
     def apply(self, *args: str) -> str:
         lines = "\n".join(self.lines)
